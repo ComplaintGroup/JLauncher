@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">JLauncher</string>
+    
+    <string name="swipe_tip">Swipe LEFT and RIGHT to switch between Workspace and AllApps</string>
+    <string name="all_apps">All Apps</string>
+
+</resources>

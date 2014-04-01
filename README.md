@@ -1,4 +1,2 @@
 JLauncher
 =========
-
-A Android launcher
