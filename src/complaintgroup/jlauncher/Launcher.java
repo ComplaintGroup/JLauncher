@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 
@@ -17,7 +16,7 @@ public class Launcher extends FragmentActivity implements LauncherModel.Callback
     private static final int POS_ALL_APPS = 1;
 
     private ViewPager mPager;
-    private PagerAdapter mPagerAdapter;
+    private LauncherPagerAdapter mPagerAdapter;
     private LauncherModel mModel;
 
     @Override
@@ -31,7 +30,7 @@ public class Launcher extends FragmentActivity implements LauncherModel.Callback
         mPager.setAdapter(mPagerAdapter);
 
         // setup model (async, will callback)
-        LauncherApplication app = ((LauncherApplication)getApplication());
+        LauncherApplication app = ((LauncherApplication) getApplication());
         mModel = app.setLauncher(this);
         mModel.startLoader();
     }
@@ -47,6 +46,8 @@ public class Launcher extends FragmentActivity implements LauncherModel.Callback
     }
 
     private class LauncherPagerAdapter extends FragmentStatePagerAdapter {
+        private WorkspaceFragment mWorkspace;
+        private AllAppsFragment mAllApps;
 
         public LauncherPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -55,13 +56,27 @@ public class Launcher extends FragmentActivity implements LauncherModel.Callback
         @Override
         public Fragment getItem(int position) {
             if (position == POS_WORKSPACE) {
-                return new WorkspaceFragment();
+                return getWorkspaceFragment();
             } else if (position == POS_ALL_APPS) {
-                return new AllAppsFragment();
+                return getAllAppsFragment();
             } else {
                 // should not happen
                 return new Fragment();
             }
+        }
+
+        public WorkspaceFragment getWorkspaceFragment() {
+            if (mWorkspace == null) {
+                mWorkspace = new WorkspaceFragment();
+            }
+            return mWorkspace;
+        }
+
+        public AllAppsFragment getAllAppsFragment() {
+            if (mAllApps == null) {
+                mAllApps = new AllAppsFragment();
+            }
+            return mAllApps;
         }
 
         @Override
@@ -74,6 +89,8 @@ public class Launcher extends FragmentActivity implements LauncherModel.Callback
     public void onAllAppsLoaded() {
         Log.d(TAG, "onAllAppsLoaded()...");
         // TODO all apps loaded, init AllApps grid view
+        mPagerAdapter.getAllAppsFragment().setAdapter(
+                new AllAppsAdapter(getApplicationContext(), mModel.getAllApps()));
     }
 
 }
