@@ -68,8 +68,10 @@ public class AllAppsAdapter extends BaseAdapter {
         String cls = info.activityInfo.name;
         ComponentName componet = new ComponentName(pkg, cls);
 
-        Intent i = new Intent();
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.addCategory(Intent.CATEGORY_LAUNCHER);
         i.setComponent(componet);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         return i;
     }
 }
