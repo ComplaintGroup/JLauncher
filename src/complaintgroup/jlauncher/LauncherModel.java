@@ -1,9 +1,14 @@
 package complaintgroup.jlauncher;
 
 import java.lang.ref.WeakReference;
+import java.text.Collator;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -40,7 +45,7 @@ public class LauncherModel extends BroadcastReceiver {
     public LauncherModel(LauncherApplication app) {
         mApp = app;
     }
-    
+
     public List<ResolveInfo> getAllApps() {
         return mAllApps;
     }
@@ -65,9 +70,11 @@ public class LauncherModel extends BroadcastReceiver {
 
     private class LoaderTask implements Runnable {
         private Context mContext;
+        private HashMap<Object, CharSequence> mLabelCache;
 
         public LoaderTask(Context context) {
             mContext = context;
+            mLabelCache = new HashMap<Object, CharSequence>();
         }
 
         @Override
@@ -78,11 +85,12 @@ public class LauncherModel extends BroadcastReceiver {
             // clear reference
             mContext = null;
         }
-        
+
         private void loadAllApps() {
             final Callbacks oldCallbacks = mCallbacks.get();
             if (oldCallbacks == null) {
-                // This launcher has exited and nobody bothered to tell us.  Just bail.
+                // This launcher has exited and nobody bothered to tell us. Just
+                // bail.
                 Log.w(TAG, "LoaderTask running with no launcher (loadAllAppsByBatch)");
                 return;
             }
@@ -92,7 +100,52 @@ public class LauncherModel extends BroadcastReceiver {
 
             final PackageManager pm = mContext.getPackageManager();
             mAllApps = pm.queryIntentActivities(mainIntent, 0);
+            // sort labels
+            Collections.sort(mAllApps, new LabelComparator(pm, mLabelCache));
             oldCallbacks.onAllAppsLoaded();
         }
+    }
+
+    static ComponentName getComponentNameFromResolveInfo(ResolveInfo info) {
+        if (info.activityInfo != null) {
+            return new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
+        } else {
+            return new ComponentName(info.serviceInfo.packageName, info.serviceInfo.name);
+        }
+    }
+
+    private class LabelComparator implements Comparator<ResolveInfo> {
+        private Collator mCollator;
+        private PackageManager mPackageManager;
+        private HashMap<Object, CharSequence> mLabelCache;
+
+        LabelComparator(PackageManager pm, HashMap<Object, CharSequence> cache) {
+            mPackageManager = pm;
+            mLabelCache = cache;
+            mCollator = Collator.getInstance();
+        }
+
+        @Override
+        public int compare(ResolveInfo a, ResolveInfo b) {
+            CharSequence labelA, labelB;
+            ComponentName keyA = LauncherModel.getComponentNameFromResolveInfo(a);
+            ComponentName keyB = LauncherModel.getComponentNameFromResolveInfo(b);
+            if (mLabelCache.containsKey(keyA)) {
+                labelA = mLabelCache.get(keyA);
+            } else {
+                labelA = a.loadLabel(mPackageManager).toString();
+
+                mLabelCache.put(keyA, labelA);
+            }
+            if (mLabelCache.containsKey(keyB)) {
+                labelB = mLabelCache.get(keyB);
+            } else {
+                labelB = b.loadLabel(mPackageManager).toString();
+
+                mLabelCache.put(keyB, labelB);
+            }
+            return mCollator.compare(labelA, labelB);
+        }
+
     }
 }

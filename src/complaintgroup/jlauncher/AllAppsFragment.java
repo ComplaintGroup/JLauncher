@@ -13,14 +13,14 @@ import android.widget.GridView;
 
 public class AllAppsFragment extends Fragment {
     private static final String TAG = "JLauncher.AllApps";
-    
+
     private GridView mGridView;
     private AllAppsAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.all_apps, container, false);
-        
+
         mGridView = (GridView) rootView.findViewById(R.id.grid_view);
         if (mAdapter != null) {
             mGridView.setAdapter(mAdapter);
@@ -29,11 +29,10 @@ public class AllAppsFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = mAdapter.getItemIntent(position);
-                // TODO QQ can not be launched by this:
-                Log.d(TAG, "item clicked: intent=" + intent.toString());
+                Intent intent = ((AllAppsAdapter) mGridView.getAdapter()).getItemIntent(position);
                 getActivity().startActivity(intent);
-            }});
+            }
+        });
 
         return rootView;
     }
@@ -42,7 +41,6 @@ public class AllAppsFragment extends Fragment {
         // this function may be called before onCreateView(), so...
         if (mGridView != null) {
             mGridView.setAdapter(adapter);
-            //mGridView.invalidateViews();
         } else {
             mAdapter = adapter;
         }

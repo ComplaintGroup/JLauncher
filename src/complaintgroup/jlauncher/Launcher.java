@@ -1,6 +1,8 @@
 package complaintgroup.jlauncher;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +20,23 @@ public class Launcher extends FragmentActivity implements LauncherModel.Callback
     private ViewPager mPager;
     private LauncherPagerAdapter mPagerAdapter;
     private LauncherModel mModel;
+
+    private static final int MSG_ALL_APPS_LOADED = 0;
+    private Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+            case MSG_ALL_APPS_LOADED:
+                mPagerAdapter.getAllAppsFragment().setAdapter(
+                        new AllAppsAdapter(getApplicationContext(), mModel.getAllApps()));
+                break;
+
+            default:
+                break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +106,8 @@ public class Launcher extends FragmentActivity implements LauncherModel.Callback
 
     @Override
     public void onAllAppsLoaded() {
-        Log.d(TAG, "onAllAppsLoaded()...");
-        // TODO all apps loaded, init AllApps grid view
-        mPagerAdapter.getAllAppsFragment().setAdapter(
-                new AllAppsAdapter(getApplicationContext(), mModel.getAllApps()));
+        // callback is not from UI thread, let handler do the works
+        mHandler.sendEmptyMessage(MSG_ALL_APPS_LOADED);
     }
 
 }
