@@ -1,5 +1,7 @@
 package complaintgroup.jlauncher;
 
+import complaintgroup.jlauncher.LauncherModel.Callbacks;
+
 import android.app.Application;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -33,7 +35,7 @@ public class LauncherApplication extends Application {
         super.onTerminate();
     }
 
-    LauncherModel setLauncher(Launcher launcher) {
+    public LauncherModel setLauncher(Callbacks launcher) {
         mModel.initialize(launcher);
         return mModel;
     }

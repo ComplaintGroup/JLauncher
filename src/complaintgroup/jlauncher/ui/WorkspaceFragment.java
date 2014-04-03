@@ -1,4 +1,7 @@
-package complaintgroup.jlauncher;
+package complaintgroup.jlauncher.ui;
+
+import complaintgroup.jlauncher.R;
+import complaintgroup.jlauncher.R.layout;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;

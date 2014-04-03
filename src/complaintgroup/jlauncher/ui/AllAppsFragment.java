@@ -1,4 +1,9 @@
-package complaintgroup.jlauncher;
+package complaintgroup.jlauncher.ui;
+
+import complaintgroup.jlauncher.AllAppsAdapter;
+import complaintgroup.jlauncher.R;
+import complaintgroup.jlauncher.R.id;
+import complaintgroup.jlauncher.R.layout;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -15,7 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="complaintgroup.jlauncher.Launcher"
+            android:name="complaintgroup.jlauncher.ui.MainActivity"
             android:clearTaskOnLaunch="true"
             android:label="@string/app_name"
             android:launchMode="singleTask" >

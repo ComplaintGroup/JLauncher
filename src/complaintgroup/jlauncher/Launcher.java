@@ -1,5 +1,8 @@
 package complaintgroup.jlauncher;
 
+import complaintgroup.jlauncher.ui.AllAppsFragment;
+import complaintgroup.jlauncher.ui.WorkspaceFragment;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;

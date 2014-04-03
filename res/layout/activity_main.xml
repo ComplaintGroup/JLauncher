@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <fragment
+        android:id="@+id/home"
+        android:name="complaintgroup.jlauncher.ui.WorkspaceFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/all_apps"
+        android:name="complaintgroup.jlauncher.ui.AllAppsFragment"
+        android:layout_width="260dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="#111" >
+    </fragment>
+
+</android.support.v4.widget.DrawerLayout>
