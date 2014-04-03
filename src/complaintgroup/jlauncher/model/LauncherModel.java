@@ -1,4 +1,4 @@
-package complaintgroup.jlauncher;
+package complaintgroup.jlauncher.model;
 
 import java.lang.ref.WeakReference;
 import java.text.Collator;
@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+
+import complaintgroup.jlauncher.LauncherApplication;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -53,6 +55,7 @@ public class LauncherModel extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "onReceive: action=" + ((intent == null) ? "null" : intent.getAction()));
+        startLoader();
     }
 
     /**

@@ -1,5 +1,6 @@
 package complaintgroup.jlauncher;
 
+import complaintgroup.jlauncher.model.LauncherModel;
 import complaintgroup.jlauncher.ui.AllAppsFragment;
 import complaintgroup.jlauncher.ui.WorkspaceFragment;
 
@@ -31,8 +32,8 @@ public class Launcher extends FragmentActivity implements LauncherModel.Callback
         public void handleMessage(Message msg) {
             switch (msg.what) {
             case MSG_ALL_APPS_LOADED:
-                mPagerAdapter.getAllAppsFragment().setAdapter(
-                        new AllAppsAdapter(getApplicationContext(), mModel.getAllApps()));
+                // mPagerAdapter.getAllAppsFragment().setAdapter(
+                // new AllAppsAdapter(getApplicationContext(), mModel.getAllApps()));
                 break;
 
             default:

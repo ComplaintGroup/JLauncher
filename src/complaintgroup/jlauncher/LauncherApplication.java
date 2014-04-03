@@ -1,6 +1,7 @@
 package complaintgroup.jlauncher;
 
-import complaintgroup.jlauncher.LauncherModel.Callbacks;
+import complaintgroup.jlauncher.model.LauncherModel;
+import complaintgroup.jlauncher.model.LauncherModel.Callbacks;
 
 import android.app.Application;
 import android.content.Intent;

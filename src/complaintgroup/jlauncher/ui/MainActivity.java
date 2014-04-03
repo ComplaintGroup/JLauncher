@@ -1,11 +1,16 @@
 package complaintgroup.jlauncher.ui;
 
-import complaintgroup.jlauncher.AllAppsAdapter;
+import java.util.ArrayList;
+import java.util.List;
+
 import complaintgroup.jlauncher.LauncherApplication;
-import complaintgroup.jlauncher.LauncherModel;
-import complaintgroup.jlauncher.LauncherModel.Callbacks;
+import complaintgroup.jlauncher.model.AppInfo;
+import complaintgroup.jlauncher.model.LauncherModel;
+import complaintgroup.jlauncher.model.LauncherModel.Callbacks;
 import complaintgroup.jlauncher.R;
 
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +24,7 @@ public class MainActivity extends FragmentActivity implements Callbacks {
     private WorkspaceFragment mHomeFragment;
     private AllAppsFragment mAllAppsFragment;
     private LauncherModel mModel;
+    List<AppInfo> mAppInfos = null;
 
     private static final int MSG_ALL_APPS_LOADED = 0;
     private Handler mHandler = new Handler() {
@@ -26,7 +32,7 @@ public class MainActivity extends FragmentActivity implements Callbacks {
         public void handleMessage(Message msg) {
             switch (msg.what) {
             case MSG_ALL_APPS_LOADED:
-                mAllAppsFragment.setAdapter(new AllAppsAdapter(getApplicationContext(), mModel.getAllApps()));
+                mAllAppsFragment.updateAdapter(mAppInfos);
                 break;
             default:
                 break;
@@ -58,7 +64,19 @@ public class MainActivity extends FragmentActivity implements Callbacks {
 
     @Override
     public void onAllAppsLoaded() {
+        mAppInfos = ResolveInfoToAppInfo(mModel.getAllApps());
         mHandler.sendEmptyMessage(MSG_ALL_APPS_LOADED);
     }
 
+    private List<AppInfo> ResolveInfoToAppInfo(List<ResolveInfo> ResolveInfos) {
+        List<AppInfo> appInfos = new ArrayList<AppInfo>();
+        if (ResolveInfos != null) {
+            PackageManager pm = getPackageManager();
+            for (ResolveInfo ri : ResolveInfos) {
+                AppInfo ai = new AppInfo(pm, ri);
+                appInfos.add(ai);
+            }
+        }
+        return appInfos;
+    }
 }

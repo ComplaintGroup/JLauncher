@@ -1,14 +1,14 @@
 package complaintgroup.jlauncher.ui;
 
-import complaintgroup.jlauncher.AllAppsAdapter;
+import java.util.List;
+
 import complaintgroup.jlauncher.R;
-import complaintgroup.jlauncher.R.id;
-import complaintgroup.jlauncher.R.layout;
+import complaintgroup.jlauncher.model.AllAppsAdapter;
+import complaintgroup.jlauncher.model.AppInfo;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +19,8 @@ import android.widget.GridView;
 public class AllAppsFragment extends Fragment {
     private static final String TAG = "JLauncher.AllApps";
 
-    private GridView mGridView;
-    private AllAppsAdapter mAdapter;
+    private GridView mGridView = null;
+    private AllAppsAdapter mAdapter = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,12 +42,16 @@ public class AllAppsFragment extends Fragment {
         return rootView;
     }
 
-    public void setAdapter(AllAppsAdapter adapter) {
+    public void updateAdapter(List<AppInfo> appInfos) {
+        if (mAdapter == null) {
+            mAdapter = new AllAppsAdapter(getActivity(), appInfos);
+        } else {
+            mAdapter.setAppsInfo(appInfos);
+        }
+
         // this function may be called before onCreateView(), so...
         if (mGridView != null) {
-            mGridView.setAdapter(adapter);
-        } else {
-            mAdapter = adapter;
+            mGridView.setAdapter(mAdapter);
         }
     }
 }
