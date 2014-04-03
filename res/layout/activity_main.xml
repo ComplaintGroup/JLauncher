@@ -14,7 +14,7 @@
     <fragment
         android:id="@+id/all_apps"
         android:name="complaintgroup.jlauncher.ui.AllAppsFragment"
-        android:layout_width="260dp"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:background="#111" >
